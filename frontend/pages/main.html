@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        /* Genel Stiller */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #B3D8FF; /* Arka plan rengi */
+            color: #0056b3; /* Yazı rengi */
+        }
+
+        /* Navbar Stili */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 2rem;
+            background-color: #007BFF; /* Navbar arka plan rengi */
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin: 0 1rem;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar ul li a:hover {
+            color: #B3D8FF;
+        }
+
+        /* İçerik Bölgesi */
+        .main-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .main-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #0056b3;
+        }
+
+        .main-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #007BFF;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature h3 {
+            color: #0056b3;
+        }
+
+        .feature p {
+            color: #007BFF;
+        }
+
+        .feature a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">EnglishApp</div>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a id="exit" href="#">Exit</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Welcome to EnglishApp!</h1>
+        <p>Your ultimate companion for improving English skills. Start your journey today and explore tailored exercises, engaging lessons, and progress tracking.</p>
+        <div class="features">
+            <div class="feature">
+                <a href="personalized-learning.html">
+                    <h3>Grammer</h3>
+                    <p>Get exercises based on your level and goals.</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="speaking.html">
+                    <h3>Speaking</h3>
+                    <p>Engage in speaking with daily life exercises.</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="progress-tracking.html">
+                    <h3>Reading</h3>
+                    <p>Improve yourself in reading contents.</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="community-support.html">
+                    <h3>Writing</h3>
+                    <p>Try yourself in writing paragraphs.</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="community-support.html">
+                    <h3>Vocabulary</h3>
+                    <p>Learn new words every session.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        &copy; 2024 EnglishApp. All rights reserved.
+    </div>
+<script>
+    addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = './login.html';
+        }
+    });
+    addEventListener('click', (event) => {
+        if (event.target.id === 'exit') {
+            localStorage.removeItem('token');
+            window.location.href = './login.html';
+        }
+    });
+</script>
+</body>
+</html>

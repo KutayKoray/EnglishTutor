@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaking AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F5F5F5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            background-color: #FAFAFA;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: #B3D8FF;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .typing-indicator {
+        display: inline-block;
+        font-size: 24px;
+        color: #007BFF;
+        animation: typingAnimation 1s infinite;
+    }
+
+    @keyframes typingAnimation {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0); }
+    }
+
+    .chat-container {
+        width: 90%;
+        max-width: 500px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .messages {
+        height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #CCC;
+        border-radius: 5px;
+        background-color: #FAFAFA;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .message {
+        padding: 10px;
+        border-radius: 5px;
+        max-width: 70%;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        background-color: #007BFF;
+        color: white;
+    }
+
+    .ai-message {
+        align-self: flex-start;
+        background-color: #B3D8FF;
+    }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="messages" id="messages"></div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Type your message...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById("messages");
+        const userInput = document.getElementById("userInput");
+        const sendButton = document.getElementById("sendButton");
+
+
+
+
+        const appendMessage = (message, sender, id = null) => {
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message", sender === "user" ? "user-message" : "ai-message");
+        messageElement.textContent = message;
+
+        // Eğer bir ID verilirse mesaj elementine ID ekleyin
+        if (id) messageElement.id = id;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to the bottom
+        };
+
+    const sendMessage = async () => {
+        const userMessage = userInput.value.trim();
+        if (!userMessage) return;
+
+        // Add user message to the chat
+        appendMessage(userMessage, "user");
+        userInput.value = "";
+
+        // Typing indicator ekle
+        const typingIndicatorId = "typing-indicator";
+        appendMessage("AI is typing...", "ai", typingIndicatorId);
+
+        try {
+            // Send user input to the API
+            const response = await fetch("http://localhost:8800/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: userMessage })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const aiResponse = data.generated_text;
+
+                // Typing indicator'ı kaldır
+                const typingIndicator = document.getElementById(typingIndicatorId);
+                if (typingIndicator) typingIndicator.remove();
+
+                // Add AI response to the chat
+                appendMessage(aiResponse, "ai");
+            } else {
+                // Typing indicator'ı kaldır
+                const typingIndicator = document.getElementById(typingIndicatorId);
+                if (typingIndicator) typingIndicator.remove();
+
+                appendMessage("Sorry, something went wrong. Please try again.", "ai");
+            }
+        } catch (error) {
+            // Typing indicator'ı kaldır
+            const typingIndicator = document.getElementById(typingIndicatorId);
+            if (typingIndicator) typingIndicator.remove();
+
+            appendMessage("Error connecting to the server.", "ai");
+        }
+    };
+
+    sendButton.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+    });
+    </script>
+</body>
+</html>

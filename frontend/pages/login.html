@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Genel Sayfa Stilleri */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #B3D8FF; /* Arka plan rengi */
+            color: #007BFF; /* Yazı rengi */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Form Konteyneri */
+        .form-container {
+            background-color: white; /* Form kutusu arka plan rengi */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Başlık Stilleri */
+        h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #0056b3; /* Başlık rengi */
+        }
+
+        /* Etiket ve Input Alanları */
+        label {
+            display: block;
+            margin-bottom: 1rem;
+            text-align: left;
+            color: #007BFF; /* Etiket rengi */
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #007BFF; /* Input kutusu kenar rengi */
+            outline: none;
+            font-size: 1rem;
+            color: #0056b3; /* Input yazı rengi */
+        }
+
+        input:focus {
+            border-color: #0056b3; /* Odaklanıldığında kenar rengi */
+            box-shadow: 0 0 5px #007BFF;
+        }
+
+        /* Buton Stili */
+        button {
+            width: 100%;
+            padding: 0.7rem;
+            font-size: 1rem;
+            background-color: #007BFF; /* Buton arka plan rengi */
+            color: white; /* Buton yazı rengi */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Hover durumu arka plan rengi */
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label>Email: <input type="email" id="email" required></label>
+            <label>Password: <input type="password" id="password" required></label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const response = await fetch('http://localhost:8000/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            if (response.ok) {
+                alert('Login successful!');
+                // navigate to the main page 
+                window.location.href = './main.html';
+                localStorage.setItem('token', data.token); 
+                console.log(data.token); // Save the token for authenticated requests
+            } else {
+                alert(data.detail);
+            }
+        });
+    </script>
+</body>
+</html>

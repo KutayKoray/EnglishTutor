@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"        # Expose frontend on port 80
+    volumes:
+      - ./frontend/static:/app/static
+      - ./frontend/templates:/app/templates
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"    # Expose FastAPI backend on port 8000
+    volumes:
+      - ./backend/app:/app
+      - ./data:/data      # Persist database (SQLite or Postgres) data
+    networks:
+      - app-network
+    depends_on:
+      - ai_service
+      - database
+
+  # AI Service (Hugging Face model)
+  ai_service:
+    build:
+      context: ./ai_service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"    # Expose AI service on port 5000
+    networks:
+      - app-network
+
+  # Database (SQLite for simplicity in this example, but can be Postgres)
+  database:
+    image: nouchka/sqlite:latest
+    volumes:
+      - ./data:/data    # Mount a persistent volume for database data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
