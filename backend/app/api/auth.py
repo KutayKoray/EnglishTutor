@@ -9,7 +9,6 @@ from app.services.user_operations import create_user, authenticate_user
 
 router = APIRouter()
 
-# Request models
 class UserRegister(BaseModel):
     username: str
     email: str

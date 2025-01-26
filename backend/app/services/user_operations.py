@@ -6,14 +6,13 @@ from passlib.context import CryptContext
 import jwt
 import datetime
 
-# Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-SECRET_KEY = "your_secret_key"  # Replace with a secure secret key
+SECRET_KEY = "very_secret_key"
 
 def create_user(db: Session, username: str, email: str, password: str, english_level: str, purpose: str, weakest_sections: str, time_period: str):
     if db.query(User).filter(User.email == email).first() or db.query(User).filter(User.username == username).first():
-        return False  # User already exists
+        return False
     hashed_password = pwd_context.hash(password)
     new_user = User(
         username=username, 

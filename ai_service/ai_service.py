@@ -3,7 +3,7 @@ from flask_cors import CORS
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 app = Flask(__name__)
-CORS(app)  # CORS'u aktif hale getir
+CORS(app)
 
 model_name = "Qwen/Qwen2.5-1.5B-Instruct"
 model = AutoModelForCausalLM.from_pretrained(

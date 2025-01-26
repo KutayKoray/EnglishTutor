@@ -117,10 +117,9 @@
             const data = await response.json();
             if (response.ok) {
                 alert('Login successful!');
-                // navigate to the main page 
                 window.location.href = './main.html';
                 localStorage.setItem('token', data.token); 
-                console.log(data.token); // Save the token for authenticated requests
+                console.log(data.token);
             } else {
                 alert(data.detail);
             }

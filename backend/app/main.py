@@ -8,10 +8,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Tüm domainlere izin ver (üretim ortamında sınırlandırılması önerilir)
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Tüm HTTP metodlarına izin ver
-    allow_headers=["*"],  # Tüm header'lara izin ver
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # API'yi FastAPI uygulamasına ekle

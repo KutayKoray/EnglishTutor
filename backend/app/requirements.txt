@@ -2,4 +2,4 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic
-aiohttp          # For HTTP requests to AI service
+aiohttp

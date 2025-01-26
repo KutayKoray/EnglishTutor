@@ -159,27 +159,23 @@
         messageElement.classList.add("message", sender === "user" ? "user-message" : "ai-message");
         messageElement.textContent = message;
 
-        // Eğer bir ID verilirse mesaj elementine ID ekleyin
         if (id) messageElement.id = id;
 
         messagesContainer.appendChild(messageElement);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to the bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
         };
 
     const sendMessage = async () => {
         const userMessage = userInput.value.trim();
         if (!userMessage) return;
 
-        // Add user message to the chat
         appendMessage(userMessage, "user");
         userInput.value = "";
 
-        // Typing indicator ekle
         const typingIndicatorId = "typing-indicator";
         appendMessage("AI is typing...", "ai", typingIndicatorId);
 
         try {
-            // Send user input to the API
             const response = await fetch("http://localhost:8800/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -190,21 +186,17 @@
                 const data = await response.json();
                 const aiResponse = data.generated_text;
 
-                // Typing indicator'ı kaldır
                 const typingIndicator = document.getElementById(typingIndicatorId);
                 if (typingIndicator) typingIndicator.remove();
 
-                // Add AI response to the chat
                 appendMessage(aiResponse, "ai");
             } else {
-                // Typing indicator'ı kaldır
                 const typingIndicator = document.getElementById(typingIndicatorId);
                 if (typingIndicator) typingIndicator.remove();
 
                 appendMessage("Sorry, something went wrong. Please try again.", "ai");
             }
         } catch (error) {
-            // Typing indicator'ı kaldır
             const typingIndicator = document.getElementById(typingIndicatorId);
             if (typingIndicator) typingIndicator.remove();
 
